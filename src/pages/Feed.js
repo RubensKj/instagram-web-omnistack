@@ -53,7 +53,7 @@ class Feed extends Component {
                     </>
                 ) : (
                         <>
-                            {this.state.feed && this.state.feed.map(post => (
+                            {this.state && this.state.feed.map(post => (
                                 <article key={post.id}>
                                     <header>
                                         <div className="user-info">
