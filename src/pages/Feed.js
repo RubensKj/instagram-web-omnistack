@@ -42,7 +42,7 @@ class Feed extends Component {
     render() {
         return (
             <section id="post-list">
-                {this.state.feed !== undefined && this.state.feed.map(post => (
+                {this.state && this.state.feed.map(post => (
                     <article key={post.id}>
                         <header>
                             <div className="user-info">
