@@ -23,7 +23,7 @@ class Feed extends Component {
         api.get('posts').then(response => {
             this.setState({ feed: response.data })
         }).catch(error => {
-            this.setState({ error: error.error.message, hasErrors: true });
+            this.setState({ error: error.message, hasErrors: true });
         });
     }
 
@@ -51,10 +51,10 @@ class Feed extends Component {
         return (
             <section id="post-list">
                 {this.state.hasErrors ? (
-                    <>
-                        <p color="#CCC">Desculpe, mas não foi possível buscar nenhum post.</p>
-                        <p color="#CCC">Error -> ${this.state.error}</p>
-                    </>
+                    <div className="area-error">
+                        <p>Desculpe, mas não foi possível buscar nenhum post.</p>
+                        <p>Message: ${this.state.error}</p>
+                    </div>
                 ) : (
                         <>
                             {this.state && this.state.feed.map(post => (
