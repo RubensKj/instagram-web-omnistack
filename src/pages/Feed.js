@@ -30,6 +30,10 @@ class Feed extends Component {
     registerToSocket = () => {
         const socket = io(apiUrl);
 
+        if (!socket) {
+            return;
+        }
+
         socket.on('post', newPost => {
             this.setState({ feed: [newPost, ...this.state.feed] })
         })
