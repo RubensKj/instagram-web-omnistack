@@ -46,8 +46,11 @@ class Feed extends Component {
     render() {
         return (
             <section id="post-list">
-                {hasErrors ? (
-                    <p color="#CCC">Desculpe, mas não foi possível buscar nenhum post.</p>
+                {this.state.hasErrors ? (
+                    <>
+                        <p color="#CCC">Desculpe, mas não foi possível buscar nenhum post.</p>
+                        <p color="#CCC">Error -> ${this.state.error}</p>
+                    </>
                 ) : (
                         <>
                             {this.state.feed && this.state.feed.map(post => (
