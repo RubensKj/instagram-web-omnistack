@@ -13,14 +13,18 @@ import send from '../assets/send.svg';
 class Feed extends Component {
     state = {
         feed: [],
+        error: '',
+        hasErrors: false
     };
 
     async componentDidMount() {
         this.registerToSocket();
 
-        const response = await api.get('posts');
-
-        this.setState({ feed: response.data })
+        api.get('posts').then(response => {
+            this.setState({ feed: response.data })
+        }).catch(error => {
+            this.setState({ error: error.error.message, hasErrors: true });
+        });
     }
 
     registerToSocket = () => {
@@ -42,36 +46,42 @@ class Feed extends Component {
     render() {
         return (
             <section id="post-list">
-                {this.state && this.state.feed.map(post => (
-                    <article key={post.id}>
-                        <header>
-                            <div className="user-info">
-                                <span>{post.author}</span>
-                                <span className="place">{post.place}</span>
-                            </div>
+                {hasErrors ? (
+                    <p color="#CCC">Desculpe, mas não foi possível buscar nenhum post.</p>
+                ) : (
+                        <>
+                            {this.state.feed && this.state.feed.map(post => (
+                                <article key={post.id}>
+                                    <header>
+                                        <div className="user-info">
+                                            <span>{post.author}</span>
+                                            <span className="place">{post.place}</span>
+                                        </div>
 
-                            <img src={more} alt="Mais" />
-                        </header>
-                        <img src={`${apiUrl}/uploads/resized/${post.image}`} alt="" />
+                                        <img src={more} alt="Mais" />
+                                    </header>
+                                    <img src={`${apiUrl}/uploads/resized/${post.image}`} alt="" />
 
-                        <footer>
-                            <div className="actions">
-                                <button type="button" onClick={() => this.handleLike(post.id)}>
-                                    <img src={like} alt="" />
-                                </button>
-                                <img src={comment} alt="" />
-                                <img src={send} alt="" />
-                            </div>
+                                    <footer>
+                                        <div className="actions">
+                                            <button type="button" onClick={() => this.handleLike(post.id)}>
+                                                <img src={like} alt="" />
+                                            </button>
+                                            <img src={comment} alt="" />
+                                            <img src={send} alt="" />
+                                        </div>
 
-                            <strong>{post.like} curtidas</strong>
+                                        <strong>{post.like} curtidas</strong>
 
-                            <p>
-                                {post.description}
-                                <span>{post.hashtags}</span>
-                            </p>
-                        </footer>
-                    </article>
-                ))}
+                                        <p>
+                                            {post.description}
+                                            <span>{post.hashtags}</span>
+                                        </p>
+                                    </footer>
+                                </article>
+                            ))}
+                        </>
+                    )}
             </section>
         );
     }
